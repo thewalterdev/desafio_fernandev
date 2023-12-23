@@ -1,7 +1,8 @@
 import styled from "styled-components"
 import Form from "./components/Form"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { FaGithub, FaLinkedin } from "react-icons/fa"
+import SuccessNotification from "./components/SuccessNotification"
 
 interface Data {
   fullname: string
@@ -19,6 +20,8 @@ export default function App() {
 
   const [progress, setProgress] = useState<number>(0)
 
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
@@ -27,6 +30,17 @@ export default function App() {
       [name]: value
     }));
   };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    setFormSubmitted(true)
+    setProgress(0)
+    setData({
+      fullname: "",
+      email: "",
+      maritalStatus: ""
+    })
+  }
 
   useEffect(() => {
 
@@ -60,6 +74,7 @@ export default function App() {
 
   return (
     <Container>
+      {formSubmitted ? <SuccessNotification /> : <></>}
       <Info>
         <Title href="https://www.youtube.com/watch?v=ngcH4e2RTUM" target="_blank">progresso do formulário - desafio</Title>
       </Info>
@@ -67,7 +82,7 @@ export default function App() {
         <ProgressBarContainer>
           <ProgressBar style={{width: `${progress}%`}} />
         </ProgressBarContainer>
-        <Form.Form>
+        <Form.Form onSubmit={handleSubmit}>
           <Form.Input
           name="fullname"
           id="fullname"

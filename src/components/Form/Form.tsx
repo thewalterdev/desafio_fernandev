@@ -1,8 +1,13 @@
+import { FormHTMLAttributes } from "react"
 import styled from "styled-components"
 
-export default function FormElement({children}: {children: React.ReactNode}) {
+interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
+    children: React.ReactNode
+}
+
+export default function FormElement({children, ...props}: FormProps) {
     return (
-        <Container>
+        <Container {...props}>
             {children}
         </Container>
     )
